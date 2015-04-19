@@ -3,7 +3,7 @@
  *
  *  David Janes
  *  IOTDB.org
- *  YYYY-MM-DD
+ *  2015-04-19
  *
  *  Copyright [2013-2015] [David P. Janes]
  *
@@ -22,9 +22,9 @@
 
 "use strict";
 
-exports.Bridge = require('./TemplateBridge');
+exports.Bridge = require('./ChromecastBridge');
 exports.bindings = [
-    require('./models/Template').binding,
+    require('./models/Chromecast').binding,
 ];
 
 exports.iotdb = require("iotdb");

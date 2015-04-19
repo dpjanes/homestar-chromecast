@@ -1,2 +1,2 @@
-# homestar-template
-IOTDB / HomeStar Controller for Template
+# homestar-chromecast
+IOTDB / HomeStar Controller for Chromecast

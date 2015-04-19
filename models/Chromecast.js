@@ -1,21 +1,33 @@
 /*
- *  Template.js
+ *  Chromecast.js
  *
  *  David Janes
  *  IOTDB
- *  YYYY-MM-DD
+ *  2015-04-19
  */
 
 var iotdb = require("iotdb");
+var _ = iotdb._;
 
 exports.Model = iotdb.make_model('LIFXLight')
     // .facet(":lighting")
-    .name("Template")
-    // .description("Template")
-    .io("on", iotdb.boolean.on)
+    .name("Chromecast")
+    // .description("Chromecast")
+    // .io("on", iotdb.boolean.on)
+    .io("volume", iotdb.number.unit.volume)
+    .io("mute", iotdb.boolean.mute)
+    .io("mode",
+        iotdb
+            .make_string(":media.mode")
+            .enumeration(_.ld.expand([
+                "iot-attribute:media.mode.play",
+                "iot-attribute:media.mode.pause",
+                "iot-attribute:media.mode.stop",
+            ]))
+    )
     .make();
 
 exports.binding = {
-    bridge: require('../TemplateBridge').Bridge,
+    bridge: require('../ChromecastBridge').Bridge,
     model: exports.Model,
 };

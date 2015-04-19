@@ -1,9 +1,9 @@
 /*
- *  TemplateBridge.js
+ *  ChromecastBridge.js
  *
  *  David Janes
  *  IOTDB.org
- *  YYYY-MM-DD
+ *  2015-04-19
  *
  *  Copyright [2013-2015] [David P. Janes]
  *
@@ -22,15 +22,15 @@
 
 "use strict";
 
+var chromecastjs = require('chromecast-js')
+
 var iotdb = require('iotdb');
 var _ = iotdb._;
 var bunyan = iotdb.bunyan;
 
-var template = require('template');
-
 var logger = bunyan.createLogger({
-    name: 'homestar-template',
-    module: 'TemplateBridge',
+    name: 'homestar-chromecast',
+    module: 'ChromecastBridge',
 });
 
 /**
@@ -45,18 +45,18 @@ var logger = bunyan.createLogger({
  *  <li><code>disconnnected</code> - this has been disconnected from a Thing
  *  </ul>
  */
-var TemplateBridge = function (initd, native) {
+var ChromecastBridge = function (initd, native) {
     var self = this;
 
     self.initd = _.defaults(initd,
-        iotdb.keystore().get("bridges/TemplateBridge/initd"), {
+        iotdb.keystore().get("bridges/ChromecastBridge/initd"), {
             poll: 30
         }
     );
     self.native = native;   // the thing that does the work - keep this name
 
     if (self.native) {
-        self.queue = _.queue("TemplateBridge");
+        self.queue = _.queue("ChromecastBridge");
     }
 };
 
@@ -67,10 +67,10 @@ var TemplateBridge = function (initd, native) {
  *  <ul>
  *  <li>look for Things (using <code>self.bridge</code> data to initialize)
  *  <li>find / create a <code>native</code> that does the talking
- *  <li>create an TemplateBridge(native)
+ *  <li>create an ChromecastBridge(native)
  *  <li>call <code>self.discovered(bridge)</code> with it
  */
-TemplateBridge.prototype.discover = function () {
+ChromecastBridge.prototype.discover = function () {
     var self = this;
 
     logger.info({
@@ -79,13 +79,17 @@ TemplateBridge.prototype.discover = function () {
 
     /*
      *  This is the core bit of discovery. As you find new
-     *  thimgs, make a new TemplateBridge and call 'discovered'.
+     *  thimgs, make a new ChromecastBridge and call 'discovered'.
      *  The first argument should be self.initd, the second
      *  the thing that you do work with
      */
-    var s = self._template();
-    s.on('something', function (native) {
-        self.discovered(new TemplateBridge(self.initd, native));
+    var browser = new chromecastjs.Browser()
+
+    browser.on('deviceOn', function(device) {
+        device.on('connected', function() {
+            self.discovered(new ChromecastBridge(self.initd, device));
+        });
+        device.connect()
     });
 };
 
@@ -93,7 +97,7 @@ TemplateBridge.prototype.discover = function () {
  *  INSTANCE
  *  This is called when the Bridge is no longer needed. When
  */
-TemplateBridge.prototype.connect = function (connectd) {
+ChromecastBridge.prototype.connect = function (connectd) {
     var self = this;
     if (!self.native) {
         return;
@@ -103,7 +107,7 @@ TemplateBridge.prototype.connect = function (connectd) {
     self.pull();
 };
 
-TemplateBridge.prototype._setup_polling = function () {
+ChromecastBridge.prototype._setup_polling = function () {
     var self = this;
     if (!self.initd.poll) {
         return;
@@ -119,7 +123,7 @@ TemplateBridge.prototype._setup_polling = function () {
     }, self.initd.poll * 1000);
 };
 
-TemplateBridge.prototype._forget = function () {
+ChromecastBridge.prototype._forget = function () {
     var self = this;
     if (!self.native) {
         return;
@@ -137,7 +141,7 @@ TemplateBridge.prototype._forget = function () {
  *  INSTANCE and EXEMPLAR (during shutdown).
  *  This is called when the Bridge is no longer needed.
  */
-TemplateBridge.prototype.disconnect = function () {
+ChromecastBridge.prototype.disconnect = function () {
     var self = this;
     if (!self.native || !self.native) {
         return;
@@ -152,7 +156,7 @@ TemplateBridge.prototype.disconnect = function () {
  *  INSTANCE.
  *  Send data to whatever you're taking to.
  */
-TemplateBridge.prototype.push = function (pushd) {
+ChromecastBridge.prototype.push = function (pushd) {
     var self = this;
     if (!self.native) {
         return;
@@ -178,7 +182,7 @@ TemplateBridge.prototype.push = function (pushd) {
  *  Do the work of pushing. If you don't need queueing
  *  consider just moving this up into push
  */
-TemplateBridge.prototype._push = function (pushd) {
+ChromecastBridge.prototype._push = function (pushd) {
     if (pushd.on !== undefined) {
     }
 };
@@ -188,7 +192,7 @@ TemplateBridge.prototype._push = function (pushd) {
  *  Pull data from whatever we're talking to. You don't
  *  have to implement this if it doesn't make sense
  */
-TemplateBridge.prototype.pull = function () {
+ChromecastBridge.prototype.pull = function () {
     var self = this;
     if (!self.native) {
         return;
@@ -211,20 +215,22 @@ TemplateBridge.prototype.pull = function () {
  *  <li><code>schema:manufacturer</code>
  *  <li><code>schema:model</code>
  */
-TemplateBridge.prototype.meta = function () {
+ChromecastBridge.prototype.meta = function () {
     var self = this;
     if (!self.native) {
         return;
     }
 
+    console.log("NATIVE", self.native);
+
     return {
-        "iot:thing": _.id.thing_urn.unique("Template", self.native.uuid, self.initd.number),
-        "schema:name": self.native.name || "Template",
+        "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.uuid, self.initd.number),
+        "schema:name": self.native.config.name || "Chromecast",
 
         // other possibilites
-        // "iot:thing": _.id.thing_urn.unique("Template", self.native.uuid, self.initd.number),
+        // "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.uuid, self.initd.number),
         // "iot:number": self.initd.number,
-        // "iot:device": _.id.thing_urn.unique("Template", self.native.uuid),
+        // "iot:device": _.id.thing_urn.unique("Chromecast", self.native.uuid),
         // "schema:manufacturer": "",
     };
 };
@@ -235,7 +241,7 @@ TemplateBridge.prototype.meta = function () {
  *  do not need to worry about connect / disconnect /
  *  shutdown states, they will be always checked first.
  */
-TemplateBridge.prototype.reachable = function () {
+ChromecastBridge.prototype.reachable = function () {
     return this.native !== null;
 };
 
@@ -245,34 +251,18 @@ TemplateBridge.prototype.reachable = function () {
  *  Return the name of the Bridge, which may be
  *  listed and displayed to the user.
  */
-TemplateBridge.prototype.configure = function (app) {};
+ChromecastBridge.prototype.configure = function (app) {};
 
 /* --- injected: THIS CODE WILL BE REMOVED AT RUNTIME, DO NOT MODIFY  --- */
-TemplateBridge.prototype.discovered = function (bridge) {
-    throw new Error("TemplateBridge.discovered not implemented");
+ChromecastBridge.prototype.discovered = function (bridge) {
+    throw new Error("ChromecastBridge.discovered not implemented");
 };
 
-TemplateBridge.prototype.pulled = function (pulld) {
-    throw new Error("TemplateBridge.pulled not implemented");
-};
-
-/* -- internals -- */
-var __singleton;
-
-/**
- *  If you need a singleton to access the library
- */
-TemplateBridge.prototype._template = function () {
-    var self = this;
-
-    if (!__singleton) {
-        __singleton = template.init();
-    }
-
-    return __singleton;
+ChromecastBridge.prototype.pulled = function (pulld) {
+    throw new Error("ChromecastBridge.pulled not implemented");
 };
 
 /*
  *  API
  */
-exports.Bridge = TemplateBridge;
+exports.Bridge = ChromecastBridge;

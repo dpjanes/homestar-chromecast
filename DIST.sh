@@ -6,7 +6,7 @@
 #   2015-MM-DD
 #
 
-PACKAGE=homestar-TEMPLATE
+PACKAGE=homestar-chromecast
 DIST_ROOT=/var/tmp/.dist.$$
 
 if [ ! -d "$DIST_ROOT" ]
@@ -33,7 +33,7 @@ echo "=================="
         --exclude "node_modules" \
         README.md LICENSE \
         homestar.json package.json \
-        TemplateBridge.js index.js \
+        ChromecastBridge.js index.js \
         models/*js \
         |
     ( cd "${NPM_DST}" && tar xvf - )
