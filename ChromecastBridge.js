@@ -33,6 +33,10 @@ var logger = bunyan.createLogger({
     module: 'ChromecastBridge',
 });
 
+var mode_play = _.ld.expand("iot-attribute:media.mode.play");
+var mode_pause = _.ld.expand("iot-attribute:media.mode.pause");
+var mode_stop = _.ld.expand("iot-attribute:media.mode.stop");
+
 /**
  *  EXEMPLAR and INSTANCE
  *  <p>
@@ -164,28 +168,175 @@ ChromecastBridge.prototype.push = function (pushd) {
 
     logger.info({
         method: "push",
-        putd: putd
+        pushd: pushd
     }, "push");
 
-    var qitem = {
-        // if you set "id", new pushes will unqueue old pushes with the same id
-        // id: self.number, 
-        run: function () {
-            self._pushd(pushd);
-            self.queue.finished(qitem);
-        }
-    };
-    self.queue.add(qitem);
-};
+    // note: play - play a media file; node=play is "unpause"
+    if (pushd.play !== undefined) {
+        self._push_play(pushd.play);
+    }
 
-/**
- *  Do the work of pushing. If you don't need queueing
- *  consider just moving this up into push
- */
-ChromecastBridge.prototype._push = function (pushd) {
-    if (pushd.on !== undefined) {
+    if (pushd.mute !== undefined) {
+        self._push_mute(pushd.mute);
+    }
+
+    if (pushd.volume !== undefined) {
+        self._push_volume(pushd.volume);
+    }
+
+    if (pushd.mode === mode_play) {
+        self._push_mode_play();
+    } else if (pushd.mode === mode_pause) {
+        self._push_mode_pause();
+    } else if (pushd.mode === mode_stop) {
+        self._push_mode_stop();
     }
 };
+
+ChromecastBridge.prototype._push_play = function (iri) {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_play",
+        run: function (queue, qitem) {
+            self.native.play(iri, 0, function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_play/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        play: null,
+                    });
+                }
+            });
+        }
+    });
+};
+
+ChromecastBridge.prototype._push_volume = function (volume) {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_volume",
+        run: function (queue, qitem) {
+            self.native.setVolume(volume, function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_volume/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        volume: volume,
+                    });
+                }
+            });
+        }
+    });
+};
+
+ChromecastBridge.prototype._push_mute = function (mute) {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_mute",
+        run: function (queue, qitem) {
+            self.native.setMuted(mute, function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_mute/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        mute: mute,
+                    });
+                }
+            });
+        }
+    });
+};
+
+ChromecastBridge.prototype._push_mode_play = function () {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_mode",
+        run: function (queue, qitem) {
+            self.native.unpause(function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_mode_play/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        mode: mode_play,
+                    });
+                }
+            });
+        }
+    });
+};
+
+ChromecastBridge.prototype._push_mode_pause = function () {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_mode",
+        run: function (queue, qitem) {
+            self.native.pause(function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_mode_pause/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        mode: mode_pause,
+                    });
+                }
+            });
+        }
+    });
+};
+
+ChromecastBridge.prototype._push_mode_stop = function () {
+    var self = this;
+
+    self.queue.add({
+        id: "_push_mode",
+        run: function (queue, qitem) {
+            self.native.stop(function (error, data) {
+                self.queue.finished(qitem);
+
+                if (error) {
+                    logger.error({
+                        method: "_push_mode_stop/callback",
+                        error: error,
+                    }, "Chromecast error");
+                } else {
+                    self.pulled({
+                        mode: mode_stop,
+                    });
+                }
+            });
+        }
+    });
+};
+
 
 /**
  *  INSTANCE.
@@ -224,7 +375,7 @@ ChromecastBridge.prototype.meta = function () {
     console.log("NATIVE", self.native);
 
     return {
-        "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.uuid, self.initd.number),
+        "iot:thing": _.id.thing_urn.network_unique("Chromecast", self.native.config.name),
         "schema:name": self.native.config.name || "Chromecast",
 
         // other possibilites

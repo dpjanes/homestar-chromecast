@@ -9,11 +9,9 @@
 var iotdb = require("iotdb");
 var _ = iotdb._;
 
-exports.Model = iotdb.make_model('LIFXLight')
-    // .facet(":lighting")
+exports.Model = iotdb.make_model('Chromecast')
+    .facet(":media")
     .name("Chromecast")
-    // .description("Chromecast")
-    // .io("on", iotdb.boolean.on)
     .io("volume", iotdb.number.unit.volume)
     .io("mute", iotdb.boolean.mute)
     .io("mode",
@@ -25,6 +23,7 @@ exports.Model = iotdb.make_model('LIFXLight')
                 "iot-attribute:media.mode.stop",
             ]))
     )
+    .io("play", iotdb.make_iri(":media.play"))
     .make();
 
 exports.binding = {

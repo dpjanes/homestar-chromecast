@@ -7,19 +7,13 @@ var Bridge = require('../ChromecastBridge').Bridge;
 var bridge_exemplar = new Bridge();
 bridge_exemplar.discovered = function(bridge) {
     console.log("+ got one\n ", bridge.meta());
-    /*
     bridge.pulled = function(state) {
         console.log("+ state-change\n ", state);
     };
     bridge.connect();
-
-    var on = false;
-    setInterval(function() {
-        bridge.push({
-            on: on,
-        });
-        on = !on;
-    }, 2500);
-    */
+    bridge.push({
+        "play": "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4",
+        "volume": 0.5,
+    });
 };
 bridge_exemplar.discover();
