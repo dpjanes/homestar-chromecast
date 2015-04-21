@@ -23,7 +23,7 @@ exports.Model = iotdb.make_model('Chromecast')
                 "iot-attribute:media.mode.stop",
             ]))
     )
-    .io("play", iotdb.make_iri(":media.play"))
+    .io("load", iotdb.make_iri(":media.load"))
     .make();
 
 exports.binding = {

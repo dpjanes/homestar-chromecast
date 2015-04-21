@@ -3,11 +3,7 @@
     "bugs": {
         "url": "https://github.com/dpjanes/homestar-chromecast/issues"
     }, 
-    "dependencies": {
-    }, 
-    "peerDependencies": {
-        "iotdb": ">=0.4.16"
-    }, 
+    "dependencies": {}, 
     "description": "HomeStar / IOTDB Bridge for Chromecast", 
     "devDependencies": {
         "grunt": "~0.4.5", 
@@ -25,6 +21,10 @@
     "license": "Apache-2.0", 
     "main": "index.js", 
     "name": "homestar-chromecast", 
+    "peerDependencies": {
+        "chromecast-js": "~0.1.7", 
+        "iotdb": ">=0.5.13"
+    }, 
     "private": false, 
     "repository": {
         "type": "git", 
@@ -33,5 +33,5 @@
     "scripts": {
         "test": "grunt"
     }, 
-    "version": "0.0.2"
+    "version": "0.0.4"
 }

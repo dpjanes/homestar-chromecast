@@ -33,9 +33,9 @@ var logger = bunyan.createLogger({
     module: 'ChromecastBridge',
 });
 
-var mode_play = _.ld.expand("iot-attribute:media.mode.play");
-var mode_pause = _.ld.expand("iot-attribute:media.mode.pause");
-var mode_stop = _.ld.expand("iot-attribute:media.mode.stop");
+var mode_play = "iot-attribute:media.mode.play";
+var mode_pause = "iot-attribute:media.mode.pause";
+var mode_stop = "iot-attribute:media.mode.stop";
 
 /**
  *  EXEMPLAR and INSTANCE
@@ -87,14 +87,29 @@ ChromecastBridge.prototype.discover = function () {
      *  The first argument should be self.initd, the second
      *  the thing that you do work with
      */
-    var browser = new chromecastjs.Browser()
+    var cp = iotdb.module("iotdb-upnp").control_point();
 
-    browser.on('deviceOn', function(device) {
+    cp.on("device", function (native) {
+        if (native.deviceType !== "urn:dial-multiscreen-org:device:dial:1") {
+            return;
+        } else if (native.manufacturer !== 'Google Inc.') {
+            return;
+        }
+
+        var device = new chromecastjs.Device({
+            addresses: [ native.host, ],
+            name: native.friendlyName,
+            manufacturer: native.manufacturer,
+            uuid: native.uuid,
+            modelName: native.modelName,
+        });
+
         device.on('connected', function() {
             self.discovered(new ChromecastBridge(self.initd, device));
         });
         device.connect()
     });
+    cp.search();
 };
 
 /**
@@ -171,9 +186,8 @@ ChromecastBridge.prototype.push = function (pushd) {
         pushd: pushd
     }, "push");
 
-    // note: play - play a media file; node=play is "unpause"
-    if (pushd.play !== undefined) {
-        self._push_play(pushd.play);
+    if (pushd.load !== undefined) {
+        self._push_load(pushd.load);
     }
 
     if (pushd.mute !== undefined) {
@@ -184,33 +198,35 @@ ChromecastBridge.prototype.push = function (pushd) {
         self._push_volume(pushd.volume);
     }
 
-    if (pushd.mode === mode_play) {
+    var mode = _.ld.compact(pushd.mode);
+    if (mode === mode_play) {
         self._push_mode_play();
-    } else if (pushd.mode === mode_pause) {
+    } else if (mode === mode_pause) {
         self._push_mode_pause();
-    } else if (pushd.mode === mode_stop) {
+    } else if (mode === mode_stop) {
         self._push_mode_stop();
     }
 };
 
-ChromecastBridge.prototype._push_play = function (iri) {
+ChromecastBridge.prototype._push_load = function (iri) {
     var self = this;
 
     self.queue.add({
-        id: "_push_play",
+        id: "_push_load",
         run: function (queue, qitem) {
             self.native.play(iri, 0, function (error, data) {
                 self.queue.finished(qitem);
 
                 if (error) {
                     logger.error({
-                        method: "_push_play/callback",
+                        method: "_push_load/callback",
                         error: error,
                     }, "Chromecast error");
                 } else {
                     self.pulled({
-                        play: null,
+                        "load": iri,
                     });
+                    self.pull();
                 }
             });
         }
@@ -235,6 +251,7 @@ ChromecastBridge.prototype._push_volume = function (volume) {
                     self.pulled({
                         volume: volume,
                     });
+                    self.pull();
                 }
             });
         }
@@ -247,7 +264,7 @@ ChromecastBridge.prototype._push_mute = function (mute) {
     self.queue.add({
         id: "_push_mute",
         run: function (queue, qitem) {
-            self.native.setMuted(mute, function (error, data) {
+            self.native.setVolumeMuted(mute, function (error, data) {
                 self.queue.finished(qitem);
 
                 if (error) {
@@ -259,6 +276,7 @@ ChromecastBridge.prototype._push_mute = function (mute) {
                     self.pulled({
                         mute: mute,
                     });
+                    self.pull();
                 }
             });
         }
@@ -283,6 +301,7 @@ ChromecastBridge.prototype._push_mode_play = function () {
                     self.pulled({
                         mode: mode_play,
                     });
+                    self.pull();
                 }
             });
         }
@@ -307,6 +326,7 @@ ChromecastBridge.prototype._push_mode_pause = function () {
                     self.pulled({
                         mode: mode_pause,
                     });
+                    self.pull();
                 }
             });
         }
@@ -331,7 +351,9 @@ ChromecastBridge.prototype._push_mode_stop = function () {
                     self.pulled({
                         mode: mode_stop,
                     });
+                    self.pull();
                 }
+
             });
         }
     });
@@ -342,12 +364,58 @@ ChromecastBridge.prototype._push_mode_stop = function () {
  *  INSTANCE.
  *  Pull data from whatever we're talking to. You don't
  *  have to implement this if it doesn't make sense
+ *
+ *  Way more information could be used:
+   { mediaSessionId: 1,
+     playbackRate: 1,
+     playerState: 'BUFFERING',
+     currentTime: 60,
+     supportedMediaCommands: 15,
+     volume: { level: 1, muted: false },
+     activeTrackIds: [],
+     media: 
+      { contentId: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4',
+        contentType: 'video/mp4',
+        duration: 596.501333 } } }
+    });
  */
 ChromecastBridge.prototype.pull = function () {
     var self = this;
     if (!self.native) {
         return;
     }
+
+    self.queue.add({
+        id: "_pull",
+        run: function (queue, qitem) {
+            self.native.getStatus(function(d) {
+                process.nextTick(function() {
+                    self.queue.finished(qitem);
+                });
+                if (!d) {
+                    self.pulled({
+                        volume: null,
+                        mute: null,
+                        load: null,
+                    });
+                    return;
+                }
+
+                var pulld = {};
+
+                if (d.volume) {
+                    pulld.volume = d.volume.level;
+                    pulld.mute = d.volume.muted;
+                }
+                
+                if (d.media) {
+                    pulld.load = d.media.contentId;
+                }
+
+                self.pulled(pulld);
+            });
+        }
+    });
 };
 
 /* --- state --- */
@@ -372,17 +440,11 @@ ChromecastBridge.prototype.meta = function () {
         return;
     }
 
-    console.log("NATIVE", self.native);
-
     return {
-        "iot:thing": _.id.thing_urn.network_unique("Chromecast", self.native.config.name),
+        "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.config.uuid),
         "schema:name": self.native.config.name || "Chromecast",
-
-        // other possibilites
-        // "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.uuid, self.initd.number),
-        // "iot:number": self.initd.number,
-        // "iot:device": _.id.thing_urn.unique("Chromecast", self.native.uuid),
-        // "schema:manufacturer": "",
+        "schema:manufacturer": self.native.config.manufacturer,
+        "schema:model": self.native.config.modelName,
     };
 };
 

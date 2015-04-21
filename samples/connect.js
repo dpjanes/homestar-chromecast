@@ -12,7 +12,7 @@ bridge_exemplar.discovered = function(bridge) {
     };
     bridge.connect();
     bridge.push({
-        "play": "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4",
+        "load": "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4",
         "volume": 0.5,
     });
 };
