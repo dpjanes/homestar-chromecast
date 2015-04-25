@@ -64,6 +64,12 @@ var ChromecastBridge = function (initd, native) {
     }
 };
 
+ChromecastBridge.prototype = new iotdb.Bridge();
+
+ChromecastBridge.prototype.name = function () {
+    return "ChromecastBridge";
+};
+
 /* --- lifecycle --- */
 
 /**
