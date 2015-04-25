@@ -67,7 +67,7 @@ ChromecastBridge.prototype.name = function () {
 /* --- lifecycle --- */
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#discover} for documentation.
  */
 ChromecastBridge.prototype.discover = function () {
     var self = this;
@@ -108,7 +108,7 @@ ChromecastBridge.prototype.discover = function () {
 };
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#connect} for documentation.
  */
 ChromecastBridge.prototype.connect = function (connectd) {
     var self = this;
@@ -153,7 +153,7 @@ ChromecastBridge.prototype._forget = function () {
 };
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#disconnect} for documentation.
  */
 ChromecastBridge.prototype.disconnect = function () {
     var self = this;
@@ -167,7 +167,7 @@ ChromecastBridge.prototype.disconnect = function () {
 /* --- data --- */
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#push} for documentation.
  */
 ChromecastBridge.prototype.push = function (pushd) {
     var self = this;
@@ -357,7 +357,7 @@ ChromecastBridge.prototype._push_mode_stop = function () {
 
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#pull} for documentation.
  *
  *  Way more information could be used:
    { mediaSessionId: 1,
@@ -415,7 +415,7 @@ ChromecastBridge.prototype.pull = function () {
 /* --- state --- */
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#meta} for documentation.
  */
 ChromecastBridge.prototype.meta = function () {
     var self = this;
@@ -432,14 +432,14 @@ ChromecastBridge.prototype.meta = function () {
 };
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#reachable} for documentation.
  */
 ChromecastBridge.prototype.reachable = function () {
     return this.native !== null;
 };
 
 /**
- *  See {iotdb.bridge.Bridge#XXX} for documentation.
+ *  See {iotdb.bridge.Bridge#configure} for documentation.
  */
 ChromecastBridge.prototype.configure = function (app) {};
 
