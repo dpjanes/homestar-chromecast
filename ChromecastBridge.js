@@ -439,15 +439,6 @@ ChromecastBridge.prototype.reachable = function () {
  */
 ChromecastBridge.prototype.configure = function (app) {};
 
-/* --- injected: THIS CODE WILL BE REMOVED AT RUNTIME, DO NOT MODIFY  --- */
-ChromecastBridge.prototype.discovered = function (bridge) {
-    throw new Error("ChromecastBridge.discovered not implemented");
-};
-
-ChromecastBridge.prototype.pulled = function (pulld) {
-    throw new Error("ChromecastBridge.pulled not implemented");
-};
-
 /*
  *  API
  */
