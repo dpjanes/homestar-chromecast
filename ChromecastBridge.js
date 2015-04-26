@@ -22,7 +22,7 @@
 
 "use strict";
 
-var chromecastjs = require('chromecast-js')
+var chromecastjs = require('chromecast-js');
 
 var iotdb = require('iotdb');
 var _ = iotdb._;
@@ -51,7 +51,7 @@ var ChromecastBridge = function (initd, native) {
             poll: 30
         }
     );
-    self.native = native;   // the thing that does the work - keep this name
+    self.native = native; // the thing that does the work - keep this name
 
     if (self.native) {
         self.queue = _.queue("ChromecastBridge");
@@ -92,17 +92,17 @@ ChromecastBridge.prototype.discover = function () {
         }
 
         var device = new chromecastjs.Device({
-            addresses: [ native.host, ],
+            addresses: [native.host, ],
             name: native.friendlyName,
             manufacturer: native.manufacturer,
             uuid: native.uuid,
             modelName: native.modelName,
         });
 
-        device.on('connected', function() {
+        device.on('connected', function () {
             self.discovered(new ChromecastBridge(self.initd, device));
         });
-        device.connect()
+        device.connect();
     });
     cp.search();
 };
@@ -382,8 +382,8 @@ ChromecastBridge.prototype.pull = function () {
     self.queue.add({
         id: "_pull",
         run: function (queue, qitem) {
-            self.native.getStatus(function(d) {
-                process.nextTick(function() {
+            self.native.getStatus(function (d) {
+                process.nextTick(function () {
                     self.queue.finished(qitem);
                 });
                 if (!d) {
@@ -401,7 +401,7 @@ ChromecastBridge.prototype.pull = function () {
                     pulld.volume = d.volume.level;
                     pulld.mute = d.volume.muted;
                 }
-                
+
                 if (d.media) {
                     pulld.load = d.media.contentId;
                 }

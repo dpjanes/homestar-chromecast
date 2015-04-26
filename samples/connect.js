@@ -1,13 +1,15 @@
 /*
- *  SEE "model.js" for the best way to use this
+ *  SEE "iotdb.js" for the best way to use this
  */
+
+"use strict";
 
 var Bridge = require('../ChromecastBridge').Bridge;
 
 var bridge_exemplar = new Bridge();
-bridge_exemplar.discovered = function(bridge) {
+bridge_exemplar.discovered = function (bridge) {
     console.log("+ got one\n ", bridge.meta());
-    bridge.pulled = function(state) {
+    bridge.pulled = function (state) {
         console.log("+ state-change\n ", state);
     };
     bridge.connect();
