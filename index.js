@@ -22,7 +22,7 @@
 
 "use strict";
 
-exports.Bridge = require('./ChromecastBridge');
+exports.Bridge = require('./ChromecastBridge').Bridge;
 exports.bindings = [
     require('./models/Chromecast').binding,
 ];

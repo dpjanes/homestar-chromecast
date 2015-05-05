@@ -12,7 +12,7 @@ bridge_exemplar.discovered = function (bridge) {
     bridge.pulled = function (state) {
         console.log("+ state-change\n ", state);
     };
-    bridge.connect();
+    bridge.connect({});
     bridge.push({
         "load": "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4",
         "volume": 0.5,
