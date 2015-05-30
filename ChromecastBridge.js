@@ -169,9 +169,10 @@ ChromecastBridge.prototype.disconnect = function () {
 /**
  *  See {iotdb.bridge.Bridge#push} for documentation.
  */
-ChromecastBridge.prototype.push = function (pushd) {
+ChromecastBridge.prototype.push = function (pushd, done) {
     var self = this;
     if (!self.native) {
+        done(new Error("not connected"));
         return;
     }
 
@@ -182,29 +183,54 @@ ChromecastBridge.prototype.push = function (pushd) {
         pushd: pushd
     }, "push");
 
-    if (pushd.load !== undefined) {
-        self._push_load(pushd.load);
+    var dcount = 0;
+    var _doing = function() {
+        dcount++;
     }
+    var _done = function() {
+        if (--dcount <= 0) {
+            done();
+        }
+    };
 
-    if (pushd.mute !== undefined) {
-        self._push_mute(pushd.mute);
-    }
+    try {
+        _doing();
 
-    if (pushd.volume !== undefined) {
-        self._push_volume(pushd.volume);
-    }
+        if (pushd.load !== undefined) {
+            _doing();
+            self._push_load(pushd.load, _done);
+        }
 
-    var mode = _.ld.compact(pushd.mode);
-    if (mode === mode_play) {
-        self._push_mode_play();
-    } else if (mode === mode_pause) {
-        self._push_mode_pause();
-    } else if (mode === mode_stop) {
-        self._push_mode_stop();
+        if (pushd.mute !== undefined) {
+            _doing();
+            self._push_mute(pushd.mute, _done);
+        }
+
+        if (pushd.volume !== undefined) {
+            _doing();
+            self._push_volume(pushd.volume);
+        }
+
+        var mode = _.ld.compact(pushd.mode);
+        if (mode === mode_play) {
+            _doing();
+            self._push_mode_play(_done);
+        } else if (mode === mode_pause) {
+            _doing();
+            self._push_mode_pause(_done);
+        } else if (mode === mode_stop) {
+            _doing();
+            self._push_mode_stop(_done);
+        }
+
+        _done();
+    } catch (x) {
+        dcount = -9999;
+        done(new Error("unexpected excption: " + x));
     }
 };
 
-ChromecastBridge.prototype._push_load = function (iri) {
+ChromecastBridge.prototype._push_load = function (iri, _done) {
     var self = this;
 
     self.queue.add({
@@ -224,12 +250,16 @@ ChromecastBridge.prototype._push_load = function (iri) {
                     });
                     self.pull();
                 }
+                
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
-ChromecastBridge.prototype._push_volume = function (volume) {
+ChromecastBridge.prototype._push_volume = function (volume, _done) {
     var self = this;
 
     self.queue.add({
@@ -250,11 +280,14 @@ ChromecastBridge.prototype._push_volume = function (volume) {
                     self.pull();
                 }
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
-ChromecastBridge.prototype._push_mute = function (mute) {
+ChromecastBridge.prototype._push_mute = function (mute, _done) {
     var self = this;
 
     self.queue.add({
@@ -275,11 +308,14 @@ ChromecastBridge.prototype._push_mute = function (mute) {
                     self.pull();
                 }
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
-ChromecastBridge.prototype._push_mode_play = function () {
+ChromecastBridge.prototype._push_mode_play = function (_done) {
     var self = this;
 
     self.queue.add({
@@ -300,11 +336,14 @@ ChromecastBridge.prototype._push_mode_play = function () {
                     self.pull();
                 }
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
-ChromecastBridge.prototype._push_mode_pause = function () {
+ChromecastBridge.prototype._push_mode_pause = function (_done) {
     var self = this;
 
     self.queue.add({
@@ -325,11 +364,14 @@ ChromecastBridge.prototype._push_mode_pause = function () {
                     self.pull();
                 }
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
-ChromecastBridge.prototype._push_mode_stop = function () {
+ChromecastBridge.prototype._push_mode_stop = function (_done) {
     var self = this;
 
     self.queue.add({
@@ -349,9 +391,11 @@ ChromecastBridge.prototype._push_mode_stop = function () {
                     });
                     self.pull();
                 }
-
             });
-        }
+        },
+        coda: function() {
+            _done();
+        },
     });
 };
 
