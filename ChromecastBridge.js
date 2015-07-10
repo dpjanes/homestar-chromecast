@@ -208,17 +208,16 @@ ChromecastBridge.prototype.push = function (pushd, done) {
 
         if (pushd.volume !== undefined) {
             _doing();
-            self._push_volume(pushd.volume);
+            self._push_volume(pushd.volume, _done);
         }
 
-        var mode = _.ld.compact(pushd.mode);
-        if (mode === mode_play) {
+        if (pushd["media.play"]) {
             _doing();
             self._push_mode_play(_done);
-        } else if (mode === mode_pause) {
+        } else if (pushd["media.pause"]) {
             _doing();
             self._push_mode_pause(_done);
-        } else if (mode === mode_stop) {
+        } else if (pushd["media.stop"]) {
             _doing();
             self._push_mode_stop(_done);
         }

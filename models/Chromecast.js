@@ -14,16 +14,10 @@ exports.Model = iotdb.make_model('Chromecast')
     .name("Chromecast")
     .io("volume", iotdb.number.unit.volume)
     .io("mute", iotdb.boolean.mute)
-    .io("mode",
-        iotdb
-        .make_string(":media.mode")
-        .enumeration(_.ld.expand([
-            "iot-attribute:media.mode.play",
-            "iot-attribute:media.mode.pause",
-            "iot-attribute:media.mode.stop",
-        ]))
-    )
     .io("load", iotdb.make_iri(":media.load"))
+    .action("iot-attribute:media.play")
+    .action("iot-attribute:media.pause")
+    .action("iot-attribute:media.stop")
     .make();
 
 exports.binding = {
