@@ -23,7 +23,7 @@
     "name": "homestar-chromecast", 
     "peerDependencies": {
         "chromecast-js": "~0.1.7", 
-        "iotdb": "~0.8.1"
+        "iotdb": "~0.9.1"
     }, 
     "private": false, 
     "repository": {
@@ -33,5 +33,5 @@
     "scripts": {
         "test": "grunt"
     }, 
-    "version": "0.1.5"
+    "version": "0.1.6"
 }
