@@ -467,7 +467,7 @@ ChromecastBridge.prototype.meta = function () {
     }
 
     return {
-        "iot:thing": _.id.thing_urn.unique("Chromecast", self.native.config.uuid),
+        "iot:thing-id": _.id.thing_urn.unique("Chromecast", self.native.config.uuid),
         "schema:name": self.native.config.name || "Chromecast",
         "schema:manufacturer": self.native.config.manufacturer,
         "schema:model": self.native.config.modelName,
