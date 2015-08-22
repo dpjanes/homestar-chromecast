@@ -33,9 +33,9 @@ var logger = bunyan.createLogger({
     module: 'ChromecastBridge',
 });
 
-var mode_play = "iot-attribute:media.mode.play";
-var mode_pause = "iot-attribute:media.mode.pause";
-var mode_stop = "iot-attribute:media.mode.stop";
+var mode_play = "iot-purpose:media.mode.play";
+var mode_pause = "iot-purpose:media.mode.pause";
+var mode_stop = "iot-purpose:media.mode.stop";
 
 /**
  *  See {iotdb.bridge.Bridge#Bridge} for documentation.

@@ -15,9 +15,9 @@ exports.Model = iotdb.make_model('Chromecast')
     .io("volume", iotdb.number.unit.volume)
     .io("mute", iotdb.boolean.mute)
     .io("load", iotdb.make_iri(":media.load"))
-    .action("iot-attribute:media.play")
-    .action("iot-attribute:media.pause")
-    .action("iot-attribute:media.stop")
+    .action("iot-purpose:media.play")
+    .action("iot-purpose:media.pause")
+    .action("iot-purpose:media.stop")
     .make();
 
 exports.binding = {
