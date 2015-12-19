@@ -1,14 +1,40 @@
-# homestar-chromecast
-IOTDB / HomeStar Module - Google Chromecast
 
-<img src="https://github.com/dpjanes/iotdb-homestar/blob/master/docs/HomeStar.png" align="right" />
+# homestar-chromecast
+IOTDB / Home☆Star Controller for [Google ChromeCast](https://www.google.com/intl/en_ca/chromecast/?utm_source=chromecast.com)
+
+<img src="https://raw.githubusercontent.com/dpjanes/iotdb-homestar/master/docs/HomeStar.png" align="right" />
+
+This [Module](https://homestar.io/about/things) allows you to control your ChromeCast devices from IOTDB and Home☆Star.
 
 # Installation
 
-Install Home☆Star first. 
-See: https://github.com/dpjanes/iotdb-homestar#installation
+[Install Home☆Star first](https://homestar.io/about/install).
 
-Then
+Then:
 
-    $ homestar install homestar-ble
+    $ homestar install homestar-chromecast
+
+
+## Home☆Star
+
+Do:
+
+	$ homestar runner browser=1
+	
+You may have to refresh the page, as it may take a little while for your Things to be discovered.
+
+## IOTDB
+
+Play a video on your ChromeCast
+
+	$ node
+	>>> iotdb = require('iotdb')
+	>>> things = iotdb.connect("Chromecast")
+	>>> things.set(":media.load", "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4")
+	
+## [IoTQL](https://github.com/dpjanes/iotdb-iotql)
+
+	$ homestar install iotql
+	$ homestar iotql
+	> SET state:media.load = "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4" WHERE meta:model-id = "chromecast";
 

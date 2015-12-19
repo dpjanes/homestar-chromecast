@@ -34,7 +34,7 @@ echo "=================="
         README.md LICENSE \
         homestar.json package.json \
         ChromecastBridge.js index.js \
-        models/*js \
+        models/*.js models.iotql \
         |
     ( cd "${NPM_DST}" && tar xvf - )
 

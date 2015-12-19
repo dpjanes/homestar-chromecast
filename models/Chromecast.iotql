@@ -1,0 +1,35 @@
+CREATE MODEL Chromecast WITH
+    schema:name = "Chromecast",
+    iot:facet = iot-facet:media
+ATTRIBUTE volume WITH
+    schema:name = "volume",
+    iot:purpose = iot-purpose:volume,
+    iot:type = iot:type.number,
+    iot:unit = iot-unit:math.fraction.unit,
+    iot:minimum = 0,
+    iot:maximum = 1
+ATTRIBUTE mute WITH
+    schema:name = "mute",
+    iot:purpose = iot-purpose:mute,
+    iot:type = iot:type.boolean
+ATTRIBUTE load WITH
+    schema:name = "load",
+    iot:purpose = iot-purpose:media.load,
+    iot:type = iot:type.string,
+    iot:format = iot:format.format.iri
+ATTRIBUTE "media.play" WITH
+    schema:name = "media.play",
+    iot:purpose = iot-purpose:media.play,
+    iot:type = iot:type.null,
+    iot:write = true
+ATTRIBUTE "media.pause" WITH
+    schema:name = "media.pause",
+    iot:purpose = iot-purpose:media.pause,
+    iot:type = iot:type.null,
+    iot:write = true
+ATTRIBUTE "media.stop" WITH
+    schema:name = "media.stop",
+    iot:purpose = iot-purpose:media.stop,
+    iot:type = iot:type.null,
+    iot:write = true
+;
