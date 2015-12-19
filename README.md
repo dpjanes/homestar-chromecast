@@ -14,7 +14,6 @@ Then:
 
     $ homestar install homestar-chromecast
 
-
 ## Home☆Star
 
 Do:
@@ -34,7 +33,15 @@ Play a video on your ChromeCast
 	
 ## [IoTQL](https://github.com/dpjanes/iotdb-iotql)
 
+Play a video on your ChromeCast
+
 	$ homestar install iotql
 	$ homestar iotql
 	> SET state:media.load = "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4" WHERE meta:model-id = "chromecast";
+	
+
+# Models
+## Chromecast
+
+
 
