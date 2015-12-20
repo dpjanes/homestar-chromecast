@@ -8,5 +8,5 @@
 
 exports.binding = {
     bridge: require('../ChromecastBridge').Bridge,
-    model: require('./Chromecast.iotql'),
+    model: require('./Chromecast.json'),
 };

@@ -16,7 +16,7 @@ ATTRIBUTE load WITH
     schema:name = "load",
     iot:purpose = iot-purpose:media.load,
     iot:type = iot:type.string,
-    iot:format = iot:format.format.iri
+    iot:format = iot:format.iri
 ATTRIBUTE "media.play" WITH
     schema:name = "media.play",
     iot:purpose = iot-purpose:media.play,

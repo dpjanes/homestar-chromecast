@@ -100,9 +100,18 @@ ChromecastBridge.prototype.discover = function () {
         });
 
         device.on('connected', function () {
+            console.log("HERE:B")
             self.discovered(new ChromecastBridge(self.initd, device));
         });
-        device.connect();
+        device.connect(function(error) {
+            if (error) {
+                logger.error({
+                    method: "_discover/device.connect(callback)",
+                    error: _.error.message(error),
+                }, "unexpected chromecast error");
+            }
+        });
+        console.log("HERE:A")
     });
     cp.search();
 };
@@ -182,6 +191,12 @@ ChromecastBridge.prototype.push = function (pushd, done) {
         method: "push",
         pushd: pushd
     }, "push");
+    /*
+    self.native.play('http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4', 60, function(){
+        console.log('Playing in your chromecast!')
+    });
+    return;
+    */
 
     var dcount = 0;
     var _doing = function() {
@@ -235,13 +250,13 @@ ChromecastBridge.prototype._push_load = function (iri, _done) {
     self.queue.add({
         id: "_push_load",
         run: function (queue, qitem) {
-            self.native.play(iri, 0, function (error, data) {
+            self.native.play(iri, 60, function (error, data) {
                 self.queue.finished(qitem);
 
                 if (error) {
                     logger.error({
                         method: "_push_load/callback",
-                        error: error,
+                        error: _.error.message(error),
                     }, "Chromecast error");
                 } else {
                     self.pulled({

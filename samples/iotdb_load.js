@@ -16,5 +16,5 @@ things.on("meta", function (thing) {
 things.on("thing", function (thing) {
     console.log("+ discovered\n ", thing.thing_id(), thing.state("meta"));
 
-    thing.set(":media.play", "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4");
+    thing.set(":media.load", "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4");
 });

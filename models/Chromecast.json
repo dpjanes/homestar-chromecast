@@ -62,7 +62,7 @@
       "schema:name": "load",
       "iot:purpose": "iot-purpose:media.load",
       "iot:type": "iot:type.string",
-      "iot:format": "iot:format.format.iri",
+      "iot:format": "iot:format.iri",
       "iot:read": true,
       "iot:write": true
     },
