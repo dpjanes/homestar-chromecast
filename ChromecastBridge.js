@@ -100,7 +100,6 @@ ChromecastBridge.prototype.discover = function () {
         });
 
         device.on('connected', function () {
-            console.log("HERE:B")
             self.discovered(new ChromecastBridge(self.initd, device));
         });
         device.connect(function(error) {
@@ -108,10 +107,10 @@ ChromecastBridge.prototype.discover = function () {
                 logger.error({
                     method: "_discover/device.connect(callback)",
                     error: _.error.message(error),
+                    cauase: "likely an issue in a low level library, sigh",
                 }, "unexpected chromecast error");
             }
         });
-        console.log("HERE:A")
     });
     cp.search();
 };
