@@ -102,7 +102,7 @@ ChromecastBridge.prototype.discover = function () {
         device.on('connected', function () {
             self.discovered(new ChromecastBridge(self.initd, device));
         });
-        device.connect(function(error) {
+        device.connect(function (error) {
             if (error) {
                 logger.error({
                     method: "_discover/device.connect(callback)",
@@ -198,10 +198,10 @@ ChromecastBridge.prototype.push = function (pushd, done) {
     */
 
     var dcount = 0;
-    var _doing = function() {
+    var _doing = function () {
         dcount++;
-    }
-    var _done = function() {
+    };
+    var _done = function () {
         if (--dcount <= 0) {
             done();
         }
@@ -263,10 +263,10 @@ ChromecastBridge.prototype._push_load = function (iri, _done) {
                     });
                     self.pull();
                 }
-                
+
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
@@ -294,7 +294,7 @@ ChromecastBridge.prototype._push_volume = function (volume, _done) {
                 }
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
@@ -322,7 +322,7 @@ ChromecastBridge.prototype._push_mute = function (mute, _done) {
                 }
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
@@ -350,7 +350,7 @@ ChromecastBridge.prototype._push_mode_play = function (_done) {
                 }
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
@@ -378,7 +378,7 @@ ChromecastBridge.prototype._push_mode_pause = function (_done) {
                 }
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
@@ -406,7 +406,7 @@ ChromecastBridge.prototype._push_mode_stop = function (_done) {
                 }
             });
         },
-        coda: function() {
+        coda: function () {
             _done();
         },
     });
