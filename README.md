@@ -43,5 +43,4 @@ Play a video on your ChromeCast
 # Models
 ## Chromecast
 
-
-
+See [Chromecast.iotql](https://github.com/dpjanes/homestar-chromecast/blob/master/models/Chromecast.iotql)
