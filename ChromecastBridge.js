@@ -26,9 +26,8 @@ var chromecastjs = require('chromecast-js');
 
 var iotdb = require('iotdb');
 var _ = iotdb._;
-var bunyan = iotdb.bunyan;
 
-var logger = bunyan.createLogger({
+var logger = iotdb.logger({
     name: 'homestar-chromecast',
     module: 'ChromecastBridge',
 });
