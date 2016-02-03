@@ -81,7 +81,7 @@ ChromecastBridge.prototype.discover = function () {
      *  The first argument should be self.initd, the second
      *  the thing that you do work with
      */
-    var cp = iotdb.module("iotdb-upnp").control_point();
+    var cp = require("iotdb-upnp").control_point();
 
     cp.on("device", function (native) {
         if (native.deviceType !== "urn:dial-multiscreen-org:device:dial:1") {
