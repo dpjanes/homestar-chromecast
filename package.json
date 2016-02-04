@@ -5,7 +5,7 @@
     }, 
     "dependencies": {
         "chromecast-js": "git://github.com/dpjanes/chromecast-js.git", 
-        "iotdb": ">=0.11.0"
+        "iotdb": ">=0.12.0"
     }, 
     "description": "HomeStar / IOTDB Bridge for Chromecast", 
     "devDependencies": {
@@ -32,5 +32,5 @@
     "scripts": {
         "test": "grunt"
     }, 
-    "version": "0.1.12"
+    "version": "0.1.13"
 }
