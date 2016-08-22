@@ -15,33 +15,16 @@ Then:
 
     $ npm install homestar-chromecast
 
-# Testing
-## Home☆Star
-
-Do:
-
-	$ homestar runner browser=1
-	
-You may have to refresh the page, as it may take a little while for your Things to be discovered.
-
-## IOTDB
+# Use
 
 Play a video on your ChromeCast
 
-	$ node
-	>>> iotdb = require('iotdb')
-	>>> things = iotdb.connect("Chromecast")
-	>>> things.set(":media.load", "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4")
+	const iotdb = require('iotdb')
+    iotdb.use("homestar-chromecast")
+
+	const things = iotdb.connect("Chromecast")
+	things.set(":media.load", "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4")
 	
-## [IoTQL](https://github.com/dpjanes/iotdb-iotql)
-
-Play a video on your ChromeCast
-
-	$ homestar install iotql
-	$ homestar iotql
-	> SET state:media.load = "http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4" WHERE meta:model-id = "chromecast";
-	
-
 # Models
 ## Chromecast
 
