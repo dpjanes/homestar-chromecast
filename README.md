@@ -1,10 +1,9 @@
-
 # homestar-chromecast
-IOTDB / Home☆Star Controller for [Google ChromeCast](https://www.google.com/intl/en_ca/chromecast/?utm_source=chromecast.com)
+[IOTDB](https://github.com/dpjanes/node-iotdb) Bridge for [Google ChromeCast](https://www.google.com/intl/en_ca/chromecast/?utm_source=chromecast.com)
+This allows you to control your ChromeCast devices from IOTDB.
 
 <img src="https://raw.githubusercontent.com/dpjanes/iotdb-homestar/master/docs/HomeStar.png" align="right" />
 
-This [Module](https://homestar.io/about/things) allows you to control your ChromeCast devices from IOTDB and Home☆Star.
 
 # Installation
 

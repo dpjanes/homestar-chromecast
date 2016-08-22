@@ -3,13 +3,7 @@
     "@base": "file:///chromecast",
     "@vocab": "file:///chromecast#",
     "iot": "https://iotdb.org/pub/iot#",
-    "schema": "http://schema.org/",
     "iot-purpose": "https://iotdb.org/pub/iot-purpose#",
-    "iot-facet": "https://iotdb.org/pub/iot-facet#",
-    "iot:facet": {
-      "@id": "https://iotdb.org/pub/iot#facet",
-      "@type": "@id"
-    },
     "iot:purpose": {
       "@id": "https://iotdb.org/pub/iot#purpose",
       "@type": "@id"
@@ -23,72 +17,92 @@
       "@id": "https://iotdb.org/pub/iot#unit",
       "@type": "@id"
     },
+    "schema": "http://schema.org/",
     "iot:format": {
       "@id": "https://iotdb.org/pub/iot#format",
+      "@type": "@id"
+    },
+    "iot-facet": "https://iotdb.org/pub/iot-facet#",
+    "iot:facet": {
+      "@id": "https://iotdb.org/pub/iot#facet",
       "@type": "@id"
     }
   },
   "@id": "",
   "@type": "iot:Model",
-  "schema:name": "Chromecast",
-  "iot:facet": [
-    "iot-facet:media"
-  ],
   "iot:attribute": [
     {
-      "@type": "iot:Attribute",
       "@id": "#volume",
-      "schema:name": "volume",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
+      "iot:maximum": 1,
+      "iot:minimum": 0,
       "iot:purpose": "iot-purpose:volume",
+      "iot:read": true,
+      "iot:sensor": true,
       "iot:type": "iot:type.number",
       "iot:unit": "iot-unit:math.fraction.unit",
-      "iot:minimum": 0,
-      "iot:maximum": 1,
-      "iot:read": true,
-      "iot:write": true
+      "iot:write": true,
+      "schema:name": "volume"
     },
     {
-      "@type": "iot:Attribute",
       "@id": "#mute",
-      "schema:name": "mute",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
       "iot:purpose": "iot-purpose:mute",
+      "iot:read": true,
+      "iot:sensor": true,
       "iot:type": "iot:type.boolean",
-      "iot:read": true,
-      "iot:write": true
+      "iot:write": true,
+      "schema:name": "mute"
     },
     {
-      "@type": "iot:Attribute",
       "@id": "#load",
-      "schema:name": "load",
-      "iot:purpose": "iot-purpose:media.load",
-      "iot:type": "iot:type.string",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
       "iot:format": "iot:format.iri",
+      "iot:purpose": "iot-purpose:media.load",
       "iot:read": true,
-      "iot:write": true
+      "iot:sensor": true,
+      "iot:type": "iot:type.string",
+      "iot:write": true,
+      "schema:name": "load"
     },
     {
-      "@type": "iot:Attribute",
       "@id": "#media.play",
-      "schema:name": "media.play",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
       "iot:purpose": "iot-purpose:media.play",
+      "iot:read": true,
+      "iot:sensor": true,
       "iot:type": "iot:type.null",
-      "iot:write": true
+      "iot:write": true,
+      "schema:name": "media.play"
     },
     {
-      "@type": "iot:Attribute",
       "@id": "#media.pause",
-      "schema:name": "media.pause",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
       "iot:purpose": "iot-purpose:media.pause",
+      "iot:read": true,
+      "iot:sensor": true,
       "iot:type": "iot:type.null",
-      "iot:write": true
+      "iot:write": true,
+      "schema:name": "media.pause"
     },
     {
-      "@type": "iot:Attribute",
       "@id": "#media.stop",
-      "schema:name": "media.stop",
+      "@type": "iot:Attribute",
+      "iot:actuator": true,
       "iot:purpose": "iot-purpose:media.stop",
+      "iot:read": true,
+      "iot:sensor": true,
       "iot:type": "iot:type.null",
-      "iot:write": true
+      "iot:write": true,
+      "schema:name": "media.stop"
     }
-  ]
+  ],
+  "iot:facet": "iot-facet:media",
+  "iot:model-id": "chromecast",
+  "schema:name": "Chromecast"
 }
