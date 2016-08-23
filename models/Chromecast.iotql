@@ -20,16 +20,19 @@ ATTRIBUTE load WITH
 ATTRIBUTE "media.play" WITH
     schema:name = "media.play",
     iot:purpose = iot-purpose:media.play,
-    iot:type = iot:type.null,
+    iot:instantaneous = true,
+    iot:type = iot:type.string,
     iot:write = true
 ATTRIBUTE "media.pause" WITH
     schema:name = "media.pause",
     iot:purpose = iot-purpose:media.pause,
-    iot:type = iot:type.null,
+    iot:instantaneous = true,
+    iot:type = iot:type.string,
     iot:write = true
 ATTRIBUTE "media.stop" WITH
     schema:name = "media.stop",
     iot:purpose = iot-purpose:media.stop,
-    iot:type = iot:type.null,
+    iot:instantaneous = true,
+    iot:type = iot:type.string,
     iot:write = true
 ;
