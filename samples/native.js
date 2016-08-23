@@ -1,8 +1,8 @@
 /*
  *  This is just using the Chromecast library directly
  */
-var chromecastjs = require('chromecast-js');
-var browser = new chromecastjs.Browser();
+const chromecastjs = require('chromecast-js');
+const browser = new chromecastjs.Browser();
 
 browser.on('deviceOn', function (device) {
     device.connect();

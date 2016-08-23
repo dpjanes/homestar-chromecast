@@ -4,9 +4,9 @@
 
 "use strict";
 
-var Bridge = require('../ChromecastBridge').Bridge;
+const Bridge = require('../ChromecastBridge').Bridge;
 
-var bridge_exemplar = new Bridge();
+const bridge_exemplar = new Bridge();
 bridge_exemplar.discovered = function (bridge) {
     console.log("+ got one\n ", bridge.meta());
     bridge.pulled = function (state) {

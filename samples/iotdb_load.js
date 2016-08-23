@@ -4,9 +4,9 @@
 
 "use strict";
 
-var iotdb = require("iotdb");
+const iotdb = require("iotdb");
 
-var things = iotdb.connect("Chromecast");
+const things = iotdb.connect("Chromecast");
 things.on("istate", function (thing) {
     console.log("+", "istate\n ", thing.thing_id(), "\n ", thing.state("istate"));
 });
