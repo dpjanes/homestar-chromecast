@@ -7,6 +7,8 @@
 
 This allows you to control your ChromeCast devices from IOTDB.
 
+* [Read about Bridges](https://github.com/dpjanes/node-iotdb/blob/master/docs/bridges.md)
+
 # Installation
 
 * [Read this first](https://github.com/dpjanes/node-iotdb/blob/master/docs/install.md)

@@ -5,6 +5,7 @@
 "use strict";
 
 const iotdb = require("iotdb");
+iotdb.use("homestar-chromecast");
 
 const things = iotdb.connect("Chromecast");
 things.on("istate", function (thing) {

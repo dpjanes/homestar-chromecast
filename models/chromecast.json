@@ -72,11 +72,11 @@
       "@id": "#media.play",
       "@type": "iot:Attribute",
       "iot:actuator": true,
+      "iot:instantaneous": true,
       "iot:purpose": "iot-purpose:media.play",
       "iot:read": true,
       "iot:sensor": true,
       "iot:type": "iot:type.string",
-      "iot:instantaneous": true,
       "iot:write": true,
       "schema:name": "media.play"
     },
@@ -84,11 +84,11 @@
       "@id": "#media.pause",
       "@type": "iot:Attribute",
       "iot:actuator": true,
+      "iot:instantaneous": true,
       "iot:purpose": "iot-purpose:media.pause",
       "iot:read": true,
       "iot:sensor": true,
       "iot:type": "iot:type.string",
-      "iot:instantaneous": true,
       "iot:write": true,
       "schema:name": "media.pause"
     },
@@ -96,11 +96,11 @@
       "@id": "#media.stop",
       "@type": "iot:Attribute",
       "iot:actuator": true,
+      "iot:instantaneous": true,
       "iot:purpose": "iot-purpose:media.stop",
       "iot:read": true,
       "iot:sensor": true,
       "iot:type": "iot:type.string",
-      "iot:instantaneous": true,
       "iot:write": true,
       "schema:name": "media.stop"
     }
