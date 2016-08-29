@@ -27,3 +27,5 @@ exports.bindings = [
     require('./models/Chromecast').binding,
 ];
 
+
+exports.module_folder = __dirname;
